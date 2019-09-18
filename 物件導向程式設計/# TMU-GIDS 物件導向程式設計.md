@@ -45,6 +45,18 @@ _____
 
 ##### (2)上課筆記
 
++ 此堂課用 VS code
++ Jupyter Notebook
+	+ 互動性高，但不適合做工程
+	+ 較屬於實驗性質工具，code可以寫在同一個檔案
+	+ 下載安裝Anaconda
++ Version control
+	+ Repository 數據庫，Github 透過複製遠端資料庫在本地端，編寫完程式碼透過提交(commit)把作品push上雲端，在Github上的提交，可以看到先前的版本編輯歷史
+	+ Commit 時候一定要寫 Comment，若有 Comment 可以快速知道先前的版本變更內容，Comment 因人而異，不要太多，簡潔9好
+	+ 不同性質的修改應該分開 Commit，之後要除蟲較方便
+	+ 盡可能將 Commit 最小化/模組化，單元化 Commit
+	+  
+
 ##### (3)額外資源
 
 ##### (4)作業須知
