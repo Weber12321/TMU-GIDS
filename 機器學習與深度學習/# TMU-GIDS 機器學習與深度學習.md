@@ -89,6 +89,29 @@ _____
 
 ##### (2)上課筆記
 
+###### Data Preprocessing
++ Data warehouse > Digital asset management > No SQL
++ Big data
+	+ 非結構化資料 : 文字資料最多
+	+ 結構化資料 : 意義明確，如表格資料
++ Data Mining
+	+ 以前從資料庫中做資料探勘，但不是這麼容易
+	+ Knowledge Discovery in Databases Process (KDD)
+		+ Data base(or whatever) > Extract tardet data > Prepocessing > Transforming data > **Mining patterns** > Knowledge
+	+ 1960 研究資料如何取得 > 1970-80 資料如何管理 > 進階資料分析 與 進階資料倉儲 > 資訊系統
+	+ preinternet > www > web2.0 > social media > iot
+	+ 2020 80% 非結構化資料
+	+ Data Science must skilled language : Python, JAVA, R, SQL, Hadoop
+	+ 資料不完整 : 雜訊(偏誤資料)、不完整(缺失資料)、不一致(格式錯亂)
+	+ Cleaning > Intergration >Transformation > Reduction(精簡內容 : PCA, Cluster, 資料過大的話可以**取樣**,特徵工程) > discretization
+	+ Unstructure data
+		+ TFIDF
+		+ stop word
+		+ Stemming and Lemmatization(EG)
+	
+	+ 繁中與簡中在NLP上的差異，除了在自行上，用法也是
+	+ 簡繁體互轉，如何提升效能與正確性?  背後的演算法決定
+
 ##### (3)額外資源
 
 ##### (4)作業須知
