@@ -48,6 +48,11 @@ HIot Lab
 	+ [參考資源1](https://www.ubuntupit.com/20-best-raspberry-pi-projects-that-you-can-start-right-now/)
 	+ [參考資源2](https://www.dfrobot.com/blog-764.html?gclid=CjwKCAjw8ZHsBRA6EiwA7hw_sdCy_5YEHep-CtGgxE3Mg1FfuuyNtRIo9Ll5eiedCdcrOxYRw-K5XxoCqNwQAvD_BwE)  
 
+_____
+
++ Blynk
++ ThingSpeaker3
+
 ##### (3)額外資源
 
 ##### (4)作業須知
@@ -74,4 +79,4 @@ HIot Lab
 ##### (4)作業須知
 
 
-### Week05
+### Week05 
