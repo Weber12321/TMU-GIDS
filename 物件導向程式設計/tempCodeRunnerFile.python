@@ -1,0 +1,10 @@
+# W3 作業1 梯形公式
+# input parameter
+up = float(input("請輸入上底"))
+down = float(input("請輸入下底"))
+taka = float(input("請輸入高"))
+
+area = ((up + down)*taka)/2
+
+# calculation
+print("您輸入的參數所得出的梯形面積為 : {:d}".format(area))
