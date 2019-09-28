@@ -82,6 +82,8 @@ ____
 
 ##### (2)上課筆記
 
+`Self-introduction of senior students`
+
 ##### (3)額外資源
 
 ##### (4)作業須知
