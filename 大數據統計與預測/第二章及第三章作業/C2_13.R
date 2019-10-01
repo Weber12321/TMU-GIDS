@@ -53,7 +53,7 @@ file$C <- factor(file$C, levels=unique(file$C))
 file$mid <- factor(file$mid, levels=unique(file$mid))
 
 
-p = ggplot(file, aes(x=C, y=value, colour=variable, group=variable)) + 
+p = ggplot(file, aes(x=mid, y=value, colour=variable, group=variable)) + 
   geom_line() +
   geom_point()+
   geom_text_repel(label = file$value, 
