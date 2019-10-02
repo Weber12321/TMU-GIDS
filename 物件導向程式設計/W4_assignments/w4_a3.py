@@ -6,7 +6,7 @@ Created on Wed Oct  2 10:44:11 2019
 """
 
 def discont():
-    cus = int(input('plz enter your consume!!'))
+    cus = int(input('plz enter your $$$!!'))
     if cus >= 100000:
         n_cus = int(cus*0.8)
         print('you get 20% off.\nyou shall pay: {:0}'.format(n_cus))
