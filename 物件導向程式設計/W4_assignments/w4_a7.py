@@ -19,4 +19,4 @@ def zero(x):
     m = str(x)
     return len(m)-len(m.rstrip('0'))
 
-print(zero(total))
+print('there are',zero(total),'zeros')
