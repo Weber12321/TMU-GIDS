@@ -15,5 +15,5 @@ while True:
         print('歡迎光臨!')
         break
     else:
-        print ('密碼錯誤!')
+        print ('密碼錯誤!重新輸入')
         continue
