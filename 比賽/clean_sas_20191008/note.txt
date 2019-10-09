@@ -1,0 +1,134 @@
+靠橋 後推?與班機大小、重量的關係?耗油?
+各種客機型態的班機重量
+班機重量對油耗的影響
+
+
+
+=============================================
+=============================================
+
+flt_schedule.csv班表明細	
+"本檔以擬真資料提供航班班表資料。
+其中包括航空公司代碼、航班編號、航班日期 (由季別、週別、星期取代)、出發、抵達機場代碼、寬/窄體客機、各艙等可載客數等資料"
+Flt_Id	班機識別碼 (可串接 航行明細，Dep_Season&Dep_Day_Of_wk&Carr_Cd&Flt_Nbr&Dep_Apt_Cd&Arr_Apt_Cd)
+Carr_Cd	航空公司代碼
+Flt_Nbr	航班編號
+Dep_Season	季別 (Summer/Winter)
+Dep_Day_Of_Wk	星期
+Dep_Apt_Cd	出發機場代碼
+Arr_Apt_Cd	抵達機場代碼
+Acft_Typ_Cd	客機型態
+C_Cls_Seat_Qty	商務艙 (C) 可載客數
+K_Cls_Seat_Qty	豪華經濟艙 (K) 可載客數
+Y_Cls_Seat_Qty	經濟艙 (Y) 可載客數
+Est_Bag_Unit_Wt	航班預計每人行李重量
+
+==========================================================
+
+flt_data.csv航行明細	
+"以班表明細的班機識別碼為鍵值。
+本檔以擬真資料提供航行相關資料或狀態。包括地面、空中航行實際時間、預計飛時及該航次之燃油成本量數。"
+Flt_Id	班機識別碼
+Taxi_Out	後推到起飛的滑行時間
+Taxi_In	落地到靠橋的滑行時間
+Block_Tm	後推到靠橋的總時間 (地面+空中)
+Flt_Tm	起飛到落地的總時間 (空中)
+Dep_Tm	預定出發時間區段 (當地時間)
+Arr_Tm	預定到達時間區段 (當地時間)
+Flt_Tm_Plan	預計飛時(分鐘)
+Fuel_Cost_Index	燃油成本量數
+
+==========================================================
+
+pax_detail.csv搭機明細
+"本檔以擬真資料提供旅客於機場報到、託運到登機的資料或狀態。
+其中包括年齡、星座、國藉、員工、票種、性別、稱謂、是否為團體旅遊、訂位艙等、座位屬性及是否有登機等狀態。"
+Pax_Key	旅客識別碼 (可串接行李明細用, Dep_Season&Dep_Day_Of_Wk&Carr_Cd&Flt_Nbr&Pax_Prm_Id) 
+Pax_Prm_Id	旅客識別碼
+Pty_Rk	顧客唯一識別碼 (遺漏值以99999999表示)
+Flt_Id	班機識別碼 (可串接班表、航行明細)
+Age	年齡 (遺漏值以999表示)
+Horscp_Nm	星座 (遺漏值以*表示)
+Nat_Cd	國籍代碼  (可透過ref_airport.csv轉換編碼，遺漏值以*表示)
+Emp_Ind	是否為員工 (Y/N)
+Pax_Typ_Cd	票種 (Audlt：成人 / Child：兒童 / Infant：嬰兒，遺漏值以*表示)
+Gndr_Cd	性別 (M：男性 / F：女性，遺漏值以*表示)
+Title_Cd	稱謂  (MR：先生 / MRS：女士 / MS：小姐 / MSTR：小弟弟 / MISS：小妹妹 ，遺漏值以*表示)
+Tvl_Seq	旅行區域序號 (與Seg_Id 串接旅區域用，遺漏值以0表示)
+Seg_Id	旅行航段序號 (串接旅區域用，遺漏值以0表示)
+Grp_Ind	是否為團體旅遊 (Y/N)
+Obd_Cbn_Cls_Cd	訂位艙等 (C：商務艙 / K：豪華經濟艙 / Y：經濟艙)
+Seat_Nbr	座位屬性 (中間座位 / 嬰兒不佔位 / 靠窗 / 靠走道，遺漏值以*表示)
+Trf_Ind	是否有轉機 (Y/N)
+Ffp_Carr_Cd	是否為會員 (EVA Member ，遺漏值以*表示)
+Ffp_Typ_Cd	會員卡籍序 (High：高 / Middle：中 / Normal：一般 ，遺漏值以*表示)
+Brdg_Stat_Desc	登機狀態 (已登機 / 未登機)
+
+==========================================================
+
+baggage_info.csv行李明細
+"以搭機明細的旅客識別碼為鍵值。
+在旅客報到時，記錄其託運行李的件數、行李總重、是否共掛行李等資料。"
+Pax_key	旅客識別碼
+Bag_Cnt	行李件數
+Bag_Wt_Msr	行李重量
+Unit_Qual_Cd	行李限重單位 (K：公斤 ，遺漏值以*表示)
+Wt_Knw_Ind	行李重量資訊 (WK：重量已知 / WU：重量未知，遺漏值以*表示)
+Pool_Ind	共掛行李註記 (NP：單獨行李/YP：共掛行李)
+
+==========================================================
+
+od_segment.csv旅行區域
+"以搭機明細的旅行區域序號及航段序號為鍵值。
+可以得知該旅客的最原始出發區域(可能非BR提供服務航段)及最終抵達區域(可能非BR提供服務航段)"
+Tvl_Seq	旅行區域序號
+Seg_Id	旅行航段序號 (遺漏值以0表示)
+OD_Grp_Id	旅行區域子序號
+Ori_Region_Desc	旅行出發區域
+Dest_Region_Desc	旅行抵達區域
+Dep_Region_Desc	旅行出發區域 (經EVA)
+Arr_Region_Desc	旅行抵達區域 (經EVA)
+
+==========================================================
+
+ref_airport.csv
+機場、城市、國家、區域轉碼參考
+上述相關檔案的機場、城市、國家、區域代碼，可以相關鍵值進行串接與轉換，進一步取得描述。
+TC_Area_Cd	飛航區域代碼
+TC_Area_Desc	飛航區域描述
+Region_Cd	區域代碼
+Region_Desc	區域描述
+Cntry_Cd	國家代碼 (2碼)
+Cntry_3_Ltr_Cd	國家代碼 (3碼)
+Cntry_Desc	國家描述
+Cty_Cd	城市代碼
+Cty_Desc	城市描述
+Apt_Cd	機場代碼
+Apt_Desc	機場描述
+		
+		
+TC_Area_Cd	TC_Area_Desc	飛航區域中文說明
+1	TC1	第一大區域(北美洲、中美洲、南美洲、加勤比海島嶼)
+2	TC2	第二大區域(歐洲、中東、非洲)
+3	TC3	第一大區域(東南亞、東北亞、亞洲次大陸、大洋洲)
+		
+Region_Cd	Region_Desc	區域中文說明
+AFR	AFRICA	非洲
+ASI	ASIA	亞洲
+C.A	C. AMERICA	中美
+CAR	CARIBBEAN	加勤比海
+CHN	CHINA	中國大陸
+EUR	EUROPE	歐洲
+H.M	HKG/MFM	港澳
+J.K	JAPAN/KOREA	東北亞 (日/韓)
+M.E	M. EAST	中東
+N.A	N. AMERICA	北美
+S.A	S. AMERICA	南美
+SAS	S. ASIA	南亞
+SEA	S. E. ASIA	東南亞
+SWP	S. W. PACIFIC	大洋洲
+
+
+
+
+
