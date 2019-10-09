@@ -94,6 +94,8 @@ ____
 
 ##### (2)上課筆記
 
+`Self-introduction of junior students`
+
 ##### (3)額外資源
 
 ##### (4)作業須知
@@ -104,8 +106,34 @@ ____
 
 ##### (2)上課筆記
 
+`Self-introduction of junior students`
+
 ##### (3)額外資源
 
 ##### (4)作業須知
 
 ### Week05
+
+##### (1)注意事項
+
+##### (2)上課筆記
+
++ Lecturer : professor Tung
+	+ Biology background 
++ Lab
+	+ B 
+
+
+##### (3)額外資源
+
+##### (4)作業須知
+
+### Week06
+
+##### (1)注意事項
+
+##### (2)上課筆記
+
+##### (3)額外資源
+
+##### (4)作業須知
