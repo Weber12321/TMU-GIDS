@@ -14,11 +14,11 @@
 
 ###### 為何 PAWS-X ?
 
-+ **Google 資料科學研究團隊**認為更多元、更龐大的語料庫將有助於解決NLP於現今應用之難題，於2019年1月提出用於英語語料庫**PAWS(Paraphrase Adversaries from Word Scrambling)**，自**維基百科**和**Quora**具挑戰性的英語同義識別(Paraphrase Identification)語料對所組成。
++ **Google 資料科學研究團隊**認為更多元、更龐大的語料庫將有助於解決NLP於現今應用之難題，於2019年1月提出用於英語語料庫**PAWS(Paraphrase Adversaries from Word Scrambling)**，自**維基百科**和**Quora**具挑戰性的英語複述識別(Paraphrase Identification)語料對所組成。
 
-+ PAWS特色，包含字詞重疊性高、語意相近的**對立式同義識別語料(Adversarial Paraphrase Identification)**。
++ PAWS特色，包含字詞重疊性高、語意相近的**對立式複述識別語料(Adversarial Paraphrase Identification)**。
 
-+ 對立式同義識別語料例子 :  _flights from New York to Florida_  vs  _flights from Florida to New York_
++ 對立式複述識別語料例子 :  _flights from New York to Florida_  vs  _flights from Florida to New York_
 
 + 對立式語料引入訓練資料集，調出自然語言處理模型截至目前之不足，以應用層面來說，例如 : 問答(QA)、文字蘊含(TE)以及文本分類等。許多關於對立式語料的研究指出，在資料集中加入對立式語料，將使建模更為清楚並為模型提供更多優化的空間。 
 
@@ -28,7 +28,7 @@
 
   
   
-  > #### 缺乏高品質之跨語言對立式同義識別語料，將限縮自然語言處理建模再優化之基準。
+  > #### 缺乏高品質之跨語言對立式複述識別語料，將限縮自然語言處理建模再優化之基準。
 
 
 
@@ -54,7 +54,7 @@
   
   ###### 翻譯評估資料
   
-+ 研究團隊從各個人工翻譯語料資料(每個語言約48,000筆) 中產出各4000對隨機樣本。隨機取樣的樣本集由另外的工作人員(非原始翻譯人員)執行並驗證，最終語料資料被保證字級錯誤率低於 5%。這些資料被拆為開發和測試集各2000對語料資料。(基於研究時間與經費限制，無法人工翻譯所有 PAWS 原來的開發與測試資料)
++ 獲得各個語言人工翻譯語料資料(共約48,000筆) 。隨機取樣的樣本集由另外的工作人員(非原始翻譯人員)執行並驗證，最終語料資料被保證字級錯誤率低於 5%。這些資料被拆為開發和測試集各2000對語料資料。(基於研究時間與經費限制，無法人工翻譯所有 PAWS 原來的開發與測試資料)
 
 + 資料集裡，每一條成對句子都是各自獨立，並不會受上下文影響，不過在初步研究中，研究團隊發現有時內文實體提及方式(Entity mention)很難被翻譯(見表一)，每一位翻譯專家翻譯時都會受各自背景知識與見解所影響。
   + 實體提及方式例子 : 台大 乃 國立臺灣大學 的實體提及方式  
@@ -79,30 +79,88 @@
 	
 	> #### PAWS-X 資料翻譯為同義驗證任務帶來新的挑戰，一個資料實體可能被翻譯為不同的詞，模型必須辨識出這些實體提及所屬相同。
 
-
-
-
-
+    > #### 研究目標 : PAWS-X 的目標是探究模型在多語言環境中捕獲語意結構和上下文的能力。
 
 ## 研究
 
 ###### 評估模型
-+ 
-###### 實驗流程與結果
-+ 
++ 模型選擇上，研究團隊選擇三個目前具有不同表現能力的模型 -- BOW, ESIM, BERT
+  + **BOW(Bag-of-words) with COS similarity** : 使用unigram到bigram 切詞編碼作為輸入特徵，並以大於 0.5 餘弦值做為同義。
+  
+    > unigram 為單字元單位 bigram 為雙字元單位 trigram 為三字元單位
+  
+  + **ESIM(Enhanced Sequential Inference Model)** : 使用 BiLSTM(Bi-directional Long Short-Term Memory) 對每一個句子進行編碼，將編碼的訊息透過前饋層(feed-forward layer)進行分類傳遞，多的layer讓ESIM可以比餘弦相似(COS similarity) 捕捉更多句子間的交互關係。
+  
+    > BiLSTM : 雙向Long Short-Term Memory(LSTM)，由前向與後向LSTM模型併接而成。LSTM屬於RNN模型的其中一種，由於其設計的特點，非常適合用於對時序數據的建模，如文本數據。
+    >
+    > Feed-forward NN : 前饋神經網絡是一個人工神經網絡，並且是沒有循環的單向傳播，是最簡單的人工神經網絡。
+  
+  + **BERT(Bidirectional Encoder Representations from Transformers)** 
+  
+    > 最近在十一種語言自然語言處理任務取得最新的成果。
+  
++ 評估所有模型的策略有
+
+  + Translate Train : 將英語訓練資料翻譯為每一種目標語言作為訓練之資料集。
+  
+  + Translate Test : 使用英語資料訓練模型，然後將所有測試資料機器翻譯為英語進行評估。
+  
++ 多語言BERT是受104種語言所訓練出的單一模型，因此可以進行跨語言訓練。 
+  
+  + Zero shot : 該模型在PAWS資料集上進行訓練，並直接應用於評估多語言資料，此策略不進行任何機器翻譯。
+  
+  +   Merged : 在所有語言上訓練多語言模型，包括英語以及其餘機器翻譯語言資料。
+
++ 表三，說明關於三個模型在 Non-local context 與 support cross-sentential word interaction上之表現結果，且些策略被用於評估哪些模型。
+
+  ![表三](C:\Users\doudi\OneDrive\Documents\TMU-GIDS\Lab\Capture3.PNG)
+###### 流程設計與結果
++ 研究團隊使用12層、預設32 size、learning rate 1e-5 的多語言BERT。關於BOW 與 ESIM ，團隊使用[fasttext.cc](https://fasttext.cc/) 之下 300維度詞彙向量實作，並允許訓練中對詞向量做 fine-tuning。
+
++ 評估指標有 Accuracy 與 AUC-PR(area-under-curve scores of precision-recall curves)
+
+  + 對BERT來說，陽性類別的機率分數用於計算AUC-PR
+  + BOW 與 ESIM，餘弦臨界值 0.5 用來計算 Accuracy
+
+  > AUC-PR : PR 曲線下面積指標。
+  >
+  > AUC is equal to the probability that a classifier will rank a randomly chosen positive instance higher than a randomly chosen negative one。
+  >
+  > 在比較不同的分類模型時，可以將每個模型的曲線都畫出來，比較曲線下面積做為模型優劣的指標。
+
++ 對所有實驗來說，根據開發集的準確性選擇最佳的模型檢查點，並根據測試集報告結果。表四、表五，分別為各個語言和每個語言平均之三模型實驗結果 Accuracy 與 AUC-PR 分數 : 
+
+  + 根據 Translate Train 與 Trainslate Test，BERT 每種語言準確性始終高於 BOW 與 ESIM (>15% accuracy)
+  + BERT 的 Translate Train 平均 Accuracy 高20%
+  + 結果表明，PAWS-X有效地測量了模型對單詞順序和句法結構的敏感度(sensitivity)。
+
+![表四](C:\Users\doudi\OneDrive\Documents\TMU-GIDS\Lab\Capture4.PNG)
+
+![表五](C:\Users\doudi\OneDrive\Documents\TMU-GIDS\Lab\Capture5.PNG)
+
++ 根據表四、表五，從 BERT 中我們可以看出，Zero-shot 表現最差，可見機器翻譯資料在多語言情境下有幫助的。而 Merged 綜合表現最好。
+
++ BERT 與 ESIM 在 Translate Train 與 Translate Test 結果模式不同 (Translate Train 在 BERT 上表現較好；而 ESIM 相反)，這可能因為 BERT 針對一百多種語言的預訓練，因此 BERT，相較於 ESIM，為非英語語言提供比較好的出發點。
+
+  > Which relies on fastText embeddings
+
++ BERT  針對英語訓練和多語訓練結果上差異上，相比 ESIM 較小。
+
++ 語言差異上，印歐語系語言(德語、西班牙語、法語)表現相較於東亞語言(華語、日語、韓語)來的好，此結果於 Zero-shot 最為明顯。造成差異可能在於 :
+
+  + 團隊使用的機器翻譯系統於印歐語系語言表現比較好。
+  + 相較於印歐語系，東亞語言語英語關係較遠。例如，英語的單詞 _Slovak_，德語翻譯為 _Slovake_，與華語_斯洛伐克_相比，相差比較遠。這現象也解釋為何 Zero-shot 差異最為明顯。
 
 
-+ BOW (Bag of the word)
-+ ESIM (Enhanced Sequential Inference Model)
-+ BERT (Bidirectional Encoder Representations)
++ 錯誤分析 : 
+	
+	+ 為了評估每個案例最佳模型(BERT merged)難度，表六顯示基於在測試集中為同一對資料，多少種語言分配了正確標籤的數量。61.7% 資料在所有語言中均正確，有 32 個案例在每種語言都錯誤，其中大部分艱澀且模冷兩可的資料，有些有不正確的標記，或於原始 PAWS 錯誤產出。其中一些可能由實體翻譯造成。
+	
+	  ![表六](C:\Users\doudi\OneDrive\Documents\TMU-GIDS\Lab\Capture6.PNG)
 
 ## 結論
 
-
-
-## 後記
-
-
+Google 團隊介紹了挑戰性的同判別資料集 PAWS-X，其中含括 23,659 筆人工翻譯評估資料 。實驗結果表明，PAWS-X有效地測量了模型對單詞順序的敏感性以及跨語言學習方法的有效性。 作為具挑戰性的判別基準，PAWS-X 為推展多語言同義判別問題研究上，留下了很大的發展空間。
 
 
 
@@ -130,7 +188,15 @@ http://terms.naer.edu.tw/detail/1678982/
 
 http://terms.naer.edu.tw/detail/1678982/
 
+https://www.jiqizhixin.com/articles/2018-10-24-13
 
+https://blog.csdn.net/jk981811667/article/details/78891827
+
+https://fasttext.cc/
+
+https://zhuanlan.zhihu.com/p/33445105
+
+[https://zh.wikipedia.org/wiki/ROC%E6%9B%B2%E7%BA%BF#%E6%9B%B2%E7%B7%9A%E4%B8%8B%E9%9D%A2%E7%A9%8D%EF%BC%88AUC%EF%BC%89](https://zh.wikipedia.org/wiki/ROC曲线#曲線下面積（AUC）)
 
 
 
@@ -146,8 +212,4 @@ http://terms.naer.edu.tw/detail/1678982/
   + http://terms.naer.edu.tw/detail/1678982/
 + 實體識別器
 	+ [https://1fly2sky.wordpress.com/2016/04/02/%E5%91%BD%E5%90%8D%E5%AF%A6%E9%AB%94%E8%AD%98%E5%88%A5%E6%8A%80%E8%A1%93named-entity-recognition/](https://1fly2sky.wordpress.com/2016/04/02/命名實體識別技術named-entity-recognition/)
-	+ 實體提及(entity mention)
-	  + 例如，台大、公館公園、杜鵑花大學 之於 國立臺灣大學
-+ BERT
-	+ Merges
-+ Accuracy vs Area-under-curve scores of precision-recall curves (AUC-PR)
++ Non-local context? support cross-sentential word interaction? 
