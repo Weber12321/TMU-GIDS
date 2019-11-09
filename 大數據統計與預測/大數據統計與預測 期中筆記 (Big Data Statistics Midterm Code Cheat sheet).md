@@ -6,14 +6,14 @@
 
 1. **Create number list by yourself in console line**
 
-   This is a function for you to type in the data one by one, as `int(input('Enter number :'))` in python 
+   This is a function for you to type in the data one by one, as `float(input('Enter number :'))` in python 
    
    ```R
    # input values as a numeric list
    input_list <- function(num) {
      l = c()
      for (i in c(1:num)) {
-       question <- as.integer(readline(prompt="Enter number as numerical list: "))
+       question <- as.numeric(readline(prompt="Enter number as numerical list: "))
        l <- append(l,question)
      }
      return(l)
@@ -153,9 +153,120 @@
    ```
 #### Ch_6 : Probability
 
-1. 
-2. q
-3. q
-4. q
-5. q
-6. 
+1. **Probability I**
+
+   Calculate **both** and **intersection** (算聯集與交集) , and **conditional probability I (not independent)** :
+
+   Input event a and event b probabilities and both or intersection
+
+   ```R
+   # If not independent, we shall calculate the both and intersection manually
+   probability_1<- function(a, b, x){
+     # x can be either both or intersection
+     inter_both <- a+b-x
+     cat('The answer (both/inter) is : ',inter_both, '\n')
+     
+     cat('if input is intersection ... if not, ignore the outcome below ...','\n') 
+     # if probability under b, probability a?
+     conditional_prob_b <- x/b
+     # if probability under b, probability a?
+     conditional_prob_a <- x/a
+     cat('event A occurs given that event B occurs :',conditional_prob_b, ' ;event B occurs given that event A occurs :',conditional_prob_a)
+   } 
+   probability_1()
+   ```
+
+2. **Conditional Probability II (independent)**
+
+   Applying from probability **table** :
+
+   ```R
+   # applying from probability table
+   conditional_probability <- function(list_a, list_b){
+     cat('event A occurs given that event B occurs :',sum(list_a), ' ;event B occurs given that event A occurs :',sum(list_b))
+   }
+   ```
+
+   
+
+3. **Diagnostic Test**
+
+   |           | Disease | Disease |         |
+   | --------- | ------- | ------- | ------- |
+   | **Test**  | Present | Absent  | Total   |
+   | +         | a       | c       | a+c     |
+   | -         | b       | d       | b+d     |
+   | **Total** | a+b     | c+d     | a+b+c+d |
+
+   $$ Sensitive =  P(T^+|D^+) = \frac {P(T^+⋂D^+)}{P(D^+)} = \frac{a}{a+b}$$
+
+   $$ Specificity =  P(T^-|D^-) = \frac {P(T^-⋂D^-)}{P(D^-)}=  \frac{d}{c+d}$$
+
+   $$FN = P(T^-|D^+) = 1 - Sensitive = 1 - P(T^+|D^+) = 1-\frac{a}{a+b}$$
+
+   $$FP = P(T^+|D^-) = 1 - Specificity = 1 - P(T^-|D^-)=1-\frac{d}{c+d}$$
+
+   $$ Predictive \:value \:positive = P(D^+|T^+) = \frac{P(D^+⋂T^+)}{P(T^+)}= \frac{Sensitive\times P(D^+)}{Sensitive\times P(D^+)+(1-Specificity)\times(1-P(D^+))} $$
+
+   $$ Predictive \:value \:negative = P(D^-|T^-) = \frac{P(D^-⋂T^-)}{P(T^-)}=\frac{Specificity\times(1-P(D^+))}{Specificity\times(1-P(D^+))+(1-Sensitive)\times P(D^+)}$$
+
+   ```r
+   # givcen the table: 
+   # a = D+ T+
+   # b = D+ T-
+   # c = D- T+
+   # d = D- T-
+   # e = prevalence (P(D+))
+   diagnostic_test_table <- function(a,b,c,d,e){
+     sen <- a/(a+b)
+     sp <- d/(c+d)
+     fn <- 1 - sen
+     fp <- 1 - sp
+     pp <- sen*e/((sen*e)+(1-sp)*(1-e))
+     pn <- sp*(1-e)/(sp*(1-e)+(1-sen)*e)
+     
+     cat(' Sensitive :', sen, '\n', 'Specificity :', sp, '\n', 'FN :', fn, '\n', 'FP :', fp, '\n', 'P+ :', pp, '\n', 'P- :', pn)
+   }
+   diagnostic_test_table()
+   
+   # givcen Sensitive, Specificity,  e = prevalence (P(D+)):
+   # fn, fp, pp, pn ?
+   diagnostic_test_sen_sp <- function(sen,sp,e){
+     fn <- 1 - sen
+     fp <- 1 - sp
+     pp <- sen*e/((sen*e)+(1-sp)*(1-e))
+     pn <- sp*(1-e)/(sp*(1-e)+(1-sen)*e)
+       
+     cat(' FN :', fn, '\n', 'FP :', fp, '\n', 'P+ :', pp, '\n', 'P- :', pn)
+   }
+   diagnostic_test_sen_sp()
+   
+   # given P+, P- , e = prevalence (P(D+)):
+   # sen, sp, fn, fp ?
+   diagnostic_pp <- function(pp, pn, e){
+     k1 <- (pp*(1-e))/(e*(1-pp))
+     k2 <- (pn*e)/((1-e)*(1-pn))
+     
+     sen <- (k1-k1*k2)/(1-k1*k2)
+     sp <- (k2-k1*k2)/(1-k1*k2)
+     
+     fn <- 1 - sen
+     fp <- 1 - sp
+     
+     cat(' Sensitive :', sen, '\n', 'Specificity :', sp, '\n', 'FN :', fn, '\n', 'FP :', fp)
+   }                                                                                     
+   diagnostic_pp()
+   
+   ```
+
+   
+
+4. **Relative Risk**
+
+   
+
+5. **Odd Ratio**
+
+   
+
+#### Ch_7 : Theoretical Probability Distribution

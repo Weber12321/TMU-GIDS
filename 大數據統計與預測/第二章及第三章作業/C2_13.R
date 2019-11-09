@@ -7,6 +7,8 @@ file <- read_excel("C2_13.xlsx")
 
 colnames(file) = c('C', 'Smokers', 'NonSmokers')
 
+file = file %>% separate(C, c("new_col","new_col_2"),"-")
+
 mid <- c('6.5', '31.5', '74.5', '124.5', '174.5', '224.5', '274.5', '300+')
 
 file <- cbind(file, mid)
