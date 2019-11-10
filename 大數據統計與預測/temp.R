@@ -88,7 +88,6 @@ diagnostic_test_table(302,179,80,372,0.10)
 diagnostic_pp <- function(pp, pn, e){
   k1 <- (pp*(1-e))/(e*(1-pp))
   k2 <- (pn*e)/((1-e)*(1-pn))
-  
   sen <- (k1-k1*k2)/(1-k1*k2)
   sp <- (k2-k1*k2)/(1-k1*k2)
   
@@ -97,4 +96,21 @@ diagnostic_pp <- function(pp, pn, e){
   
   cat(' Sensitive :', sen, '\n', 'Specificity :', sp, '\n', 'FN :', fn, '\n', 'FP :', fp)
 }       
+
+rr <- function(a,b,c,d){
+  molecule <- a/(a+b)
+  denominator <- c/(c+d)
+  output <- molecule/denominator
+  
+  cat(' Relative Risk :', output)
+}
+
+odd_ratio <- function(a,b,c,d){
+  molecule <- (a/(a+c))/(1-(a/(a+c)))
+  denominator <- (b/(b+d))/(1-(b/(b+d)))
+  output <- molecule/denominator
+  
+  cat(' Odd Ratio :', output)
+}
+
 
