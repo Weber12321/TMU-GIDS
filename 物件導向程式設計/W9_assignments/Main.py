@@ -9,12 +9,12 @@ import Campus as ca
 
 def show_students(classroom1, classroom2):
     print('Classroom1: ')
-    print('Teacher: ', str(classroom1.get_teacher().get_data()))
+    print('Teacher: ' + str(classroom1.get_teacher().get_data()))
     for s in classroom1.get_all_students():
         print(s.get_data)
 
     print('Classroom2: ')
-    print('Teacher: ', str(classroom2.get_teacher().get_data()))
+    print('Teacher: ' + str(classroom2.get_teacher().get_data()))
     for s in classroom2.get_all_students():
         print(s.get_data)
 
