@@ -11,12 +11,12 @@ def show_students(classroom1, classroom2):
     print('Classroom1: ')
     print('Teacher: ' + str(classroom1.get_teacher().get_data()))
     for s in classroom1.get_all_students():
-        print(s.get_data)
+        print(s.get_data())
 
     print('Classroom2: ')
     print('Teacher: ' + str(classroom2.get_teacher().get_data()))
     for s in classroom2.get_all_students():
-        print(s.get_data)
+        print(s.get_data())
 
 student1 = ca.Student('Student1', 100, 100, 100)
 student2 = ca.Student('Student2', 90, 90, 90)
@@ -50,3 +50,4 @@ print('---- After class ----')
 classroom1.clear()
 classroom2.clear()
 show_students(classroom1, classroom2)
+
