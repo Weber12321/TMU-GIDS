@@ -15,10 +15,11 @@ cal_pval <- function(){
   alpha = 0.05 
   z.half.alpha = qnorm(1-alpha/2) 
   ans <- c(-z.half.alpha, z.half.alpha)
-  cat('\n', 'Area', ans, '\n','Z :', z)
+  cat('\n', 'Area', ans, '\n','Z :', z, '\n')
   
   p = 2*pnorm(-abs(z))
-  cat('\n','P-value :', p)
+  cat('\n', '==== Answer ====', '\n')
+  cat('P-value :', p)
 } 
 
 # Q11.
@@ -37,6 +38,24 @@ t_dis_ci <- function(){
   error <- qt(ci,df = n-1)*sd/sqrt(n)
   left <- x - error
   right <- x + error
-  print('==== Answer ====')
+  cat('\n', '==== Answer ====', '\n')
   cat('Confidence interval :', '(',left, ',', right, ')')
 }
+
+cal_pval_t <- function(){
+  sample_avg <- as.numeric(readline(prompt="Enter Sample avg: ")) 
+  h0 <- as.numeric(readline(prompt="Enter null hypothesis: ")) 
+  sd <- as.numeric(readline(prompt="Enter Sample standard deviation: ")) 
+  size <- as.numeric(readline(prompt="Enter sample size: ")) 
+  cat(' Sample avg :', sample_avg, '\n', 'Null hypothesis :', h0, '\n', 'Sample standard deviation :'
+      , sd, '\n', 'Sample size :', size, '\n')
+  
+  z <- (sample_avg-h0)/(sd/sqrt(size))
+
+  cat('\n','t :', z, '\n')
+  
+  p = 2*pnorm(-abs(z))
+  cat('\n', '==== Answer ====', '\n')
+  cat('P-value :', p)
+} 
+

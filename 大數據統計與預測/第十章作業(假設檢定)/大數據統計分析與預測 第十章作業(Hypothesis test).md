@@ -1,10 +1,10 @@
+
+
 ## 大數據統計分析與預測 第十章作業(Hypothesis test)
 
-Created by Weber YC, Huang
+###### Created by 黃彥鈞 Weber YC, Huang (m946108006)
 
 ---
-
-
 
 #### Q3. What is a p-value? What does the p-value mean in words?
 
@@ -264,7 +264,7 @@ against  the alternative
 
 $H_A:\mu< 244\: mg/100\:ml$
 
-at the $\alpha = 0.05$ level of significance. If the true population mean is as low as $219 \:mg/100\:ml$, you want to risk only a 5% chance of failing to reject $H_0$. How large a sample would be required? 
+**at the $\alpha = 0.05$ level of significance. If the true population mean is as low as $219 \:mg/100\:ml$, you want to risk only a 5% chance of failing to reject $H_0$. How large a sample would be required?** 
 
 $\alpha = 0.05\\
 \beta = 0.05\\
@@ -292,6 +292,8 @@ pwr.t.test(d=d, sig.level=.05, power = .95, type = 'one.sample', alternative = '
           power = 0.95
     alternative = less
 ```
+
++ Answer : 30.51
 
 ##### (f) How would the sample size change if you were willing to risk a 10% chance of failing to reject a false null hypothesis?
 
@@ -321,3 +323,4 @@ One-sample t test power calculation
           power = 0.9
     alternative = less 
 ```
++ Answer : 24.45
