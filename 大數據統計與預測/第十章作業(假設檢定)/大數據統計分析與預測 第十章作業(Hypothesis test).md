@@ -168,7 +168,7 @@ Since the value 24 doesn't lie in the 95% confidence interval for $\mu$ , we sho
 
 
 
-#### Q14. Data from Framinghan study allow us to compare distributions of initial serum cholesterol levels for two populations of males: those who go on to develop coronary heart disease and those who do not. The mean serum cholesterol levels of the population of men who do not develop heart disease is $$\mu =219\:mg/100\:ml$$ and the standard deviation is $$\sigma = 41\:mg/100\:ml$$ . Suppose, however, that you do not know the true population mean；instead, you hypothesize that $\mu$ is equal to $244\:mg/100\:ml$. This is the mean initial serum cholesterol level of men who eventually develop the disease. Since it is believed that the mean serum cholesterol level for the men who do not develop the heart disease cannot be higher then the mean level who do, a one-sided test conducted at the $\alpha=0.05$ level of significance is appropriate.
+#### Q14. Data from Framinghan study allow us to compare distributions of initial serum cholesterol levels for two populations of males: those who go on to develop coronary heart disease and those who do not. The mean serum cholesterol levels of the population of men who do not develop heart disease is $$\mu =219\:mg/100\:ml$$ and the standard deviation is $$\sigma = 41\:mg/100\:ml$$ . Suppose, however, that you do not know the true population mean；instead, you hypothesize that $\mu$ is equal to $244\:mg/100\:ml$. This is the mean initial serum cholesterol level of men who eventually develop the disease. <u>Since it is believed that the mean serum cholesterol level for the men who do not develop the heart disease cannot be higher then the mean level who do</u>, a one-sided test conducted at the $\alpha=0.05$ level of significance is appropriate.
 
 ##### (a) What is the probability of making a Type I error?
 
@@ -182,10 +182,80 @@ the Type I error would be reject $H_0$, that is, false rejecting $H_0:\mu\ge244$
 
 ##### (b) If a sample of size 25 is selected from the population of men who do not go on to develop coronary heart disease, what is the probability a making a Type II error? 
 
+> R-code : 
+
+```R
+# Q14. 
+cal_t2error_lower <- function(){
+  mu <- as.numeric(readline(prompt="Enter population avg: ")) 
+  h0 <- as.numeric(readline(prompt="Enter null hypothesis: ")) 
+  sigma <- as.numeric(readline(prompt="Enter population standard deviation: ")) 
+  size <- as.numeric(readline(prompt="Enter sample size: ")) 
+  afa <- as.numeric(readline(prompt = "Enter alpha: "))
+  cat(' Pop mean :', mu, '\n', 'Null hypothesis :', 
+      h0, '\n', 'Pop standard deviation :', 
+      sigma, '\n', 'Sample size :', size, '\n', 'Alpha :', afa, '\n')
+  se <- sigma/sqrt(size) # standard error
+  q <- qnorm(afa, mean=h0, sd=se)
+  t2error <-pnorm(q, mean=mu, sd=se, lower.tail=FALSE) 
+    
+  cat('\n', '==== Answer ====', '\n')
+  cat('Type II error rate :', t2error*100, '%', '\n')
+  cat('Power :', (1-t2error)*100, '%')
+}
+cal_t2error_lower()
+```
+> Output :
+```R
+ Pop mean : 219 
+ Null hypothesis : 244 
+ Pop standard deviation : 41 
+ Sample size : 25 
+ Alpha : 0.05 
+
+ ==== Answer ==== 
+Type II error rate(Beta) : 8.017032 % 
+Power(1-Beta) : 91.98297 %
+```
+
 ##### (c) What is the power of the test?
+
+$Power(1-\beta) = 91.98\:\%$
 
 ##### (d) How could you increase the power?
 
+The factor that influence $power(1-\beta)$ are : 
+
++ Type I error rate ($\alpha$)
++ Wide of $|\mu_1-\mu_0|$
++ Sample size
+
+In fact, the $\alpha$ is commonly set as $0.05$, and the wide of $|\mu_1-\mu_0|$ is not easy to modify. The quick way to increase power is to select the correct sample size.
+$$
+size(n)= \frac{((Z_\alpha+Z_\beta)\times\sigma)^2}{(|\mu_1-\mu_0|)^2}
+$$
+**For example**, if we give the sample mean difference $|\mu_1-\mu_0|(\Delta) = 2$ , $\sigma =5$, the sample size will be $54.91\approx55$
+
+> R-code :
+```R
+# determine the perfect sample size
+# install.packages('pwr')
+library(pwr)
+delta = 2
+sigma = 5
+d = delta/sigma
+pwr.t.test(d=d, sig.level=.05, power = .90, type = 'one.sample', alternative = 'greater')
+```
+> Output :
+```R
+One-sample t test power calculation 
+
+         	 n = 54.90553
+    	 	 d = 0.4
+ 	 sig.level = 0.05
+    	 power = 0.9
+   alternative = greater
+```
 ##### (e) You wish to test the null hypothesis 
 
 $H_0:\mu\geq 244\: mg/100\:ml$
@@ -194,11 +264,60 @@ against  the alternative
 
 $H_A:\mu< 244\: mg/100\:ml$
 
- at the $\alpha = 0.05$ level of significance. If the true population mean is as low as $219 \:mg/100\:ml$, you want to risk only a 5% chance of failing to reject $H_0$. How large a sample would be required? 
+at the $\alpha = 0.05$ level of significance. If the true population mean is as low as $219 \:mg/100\:ml$, you want to risk only a 5% chance of failing to reject $H_0$. How large a sample would be required? 
+
+$\alpha = 0.05\\
+\beta = 0.05\\
+\Delta=219-244=-25\\ 
+\sigma=41$
+
+> R-code : 
+
+```R
+library(pwr)
+delta = -25
+sigma = 41
+d = delta/sigma
+pwr.t.test(d=d, sig.level=.05, power = .95, type = 'one.sample', alternative = 'less')
+```
+
+> Output :
+
+```R
+ One-sample t test power calculation 
+
+              n = 30.51692
+              d = -0.6097561
+      sig.level = 0.05
+          power = 0.95
+    alternative = less
+```
 
 ##### (f) How would the sample size change if you were willing to risk a 10% chance of failing to reject a false null hypothesis?
 
+$\alpha = 0.05\\
+\beta = 0.10\\
+\Delta=219-244=-25\\ 
+\sigma=41$
 
+> R-code : 
 
+```R
+library(pwr)
+delta = -25
+sigma = 41
+d = delta/sigma
+pwr.t.test(d=d, sig.level=.05, power = .95, type = 'one.sample', alternative = 'less')
+```
 
+> Output :
 
+```R
+One-sample t test power calculation 
+
+              n = 24.45157
+              d = -0.6097561
+      sig.level = 0.05
+          power = 0.9
+    alternative = less 
+```
