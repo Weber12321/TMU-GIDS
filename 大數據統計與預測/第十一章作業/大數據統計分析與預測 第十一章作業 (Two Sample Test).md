@@ -112,7 +112,7 @@ mean of the differences
 
 $H_0:\mu_{24}\ge\mu_{12}\\\:\:\:\:=>\mu_{12}-\mu_{24}\le0 $
 
-$H_a:\mu_{24}<\mu_{12}\\\:\:\:\:=>\mu_{12}-\mu_{24}>0$
+$H_a:\mu_{24}<\mu_{12}\\\:\:\:\:=>\mu_{12}-\mu_{24}>0(right (upper)\:tail) $
 
 $\Delta:\mu_{24}=\mu_{12}\\\:\:\:\:=>\mu_{12}-\mu_{24}=0$
 
@@ -208,7 +208,7 @@ $H_a:\mu_1-\mu_2\ne0$
 
 **(c) Conduct the test at the $0.05$ level of significance. What do you conclude?**
 $$
-t_0=\frac{\overline{x_1}-\overline{x_2}-\Delta}{\sqrt{S_p^2\times(\frac{1}{n_1}+\frac{1}{n_2})}}
+t_0=\frac{\overline{x_1}-\overline{x_2}-\Delta}{\sqrt{S_p^2\times(\frac{1}{n_1}+\frac{1}{n_2})}}
 $$
 
 $$
@@ -225,17 +225,58 @@ $$
 > R-code :
 
 ```R
-# --------------------------------------
-# Q8.c
-ind_t_equal <- function(x1, x2, s1, s2, n1, n2){
-  sp_square <- (((n1-1)*s1*s1)+((n2-1)*s2*s2))/(n1+n2-2)
-  t0 <- (x1-x2)/sqrt(sp_square*((1/n1)+(1/n2)))
-  cat('T :', t0, '\n')
-  
-  p =2*pt(t0, df=(n1+n2-2), lower.tail = TRUE)
-  cat(' ==== Answer ====','\n')
-  cat('P-value :', p)
-}
+# Q8.c Q11.b
+# independent t test
+ind_t <- function(x1, x2, s1, s2, n1, n2){
+  question <- as.character(readline(prompt="Are population variances assume to be equal (y/n) ? : "))
+  tail <- as.character(readline(prompt='What testing tail is gonna to perform (left/right/two-tails)? :'))
+  if (question == 'y') {
+    sp_square <- (((n1-1)*s1*s1)+((n2-1)*s2*s2))/(n1+n2-2)
+    t0 <- (x1-x2)/sqrt(sp_square*((1/n1)+(1/n2)))
+    df=(n1+n2-2)
+    cat('T :', t0, '\n')
+    cat('df :', df, '\n')
+    if (tail == 'left') {
+      p = 2*pt(t0, df=df, lower.tail = TRUE)
+      cat(' ==== Answer ====','\n')
+      cat('left-tail t test', '\n')
+      cat('P-value :', p)
+    }else if(tail == 'two-sided'){
+      p = 2*pt(t0, df=df, lower.tail = TRUE)
+      cat(' ==== Answer ====','\n')
+      cat('two-tails t test', '\n')
+      cat('P-value :', p)
+    }else{
+      p = 2*pt(t0, df=df, lower.tail = FALSE)
+      cat(' ==== Answer ====','\n')
+      cat('right-tail t test', '\n')
+      cat('P-value :', p)
+    }
+  }
+  else{
+    t0 <- ((x1-x2)-0)/sqrt((s1*s1/n1)+(s2*s2/n2))
+    df <- ((s1*s1/n1)+(s2*s2/n2))^2/(((s1*s1/n1)^2/(n1-1))+((s2*s2/n2)^2/(n2-1)))
+    cat('T :', t0, '\n')
+    cat('df :', df, '\n')
+    if (tail == 'left') {
+      p = pt(t0, df=df, lower.tail=TRUE) 
+      cat(' ==== Answer ====','\n')
+      cat('left-tail t test', '\n')
+      cat('P-value :', p)
+    }else if(tail == 'two-sided'){
+      p = pt(t0, df=df, lower.tail=TRUE) 
+      cat(' ==== Answer ====','\n')
+      cat('two-tails t test', '\n')
+      cat('P-value :', p)
+    }else{
+      p = pt(t0, df=df, lower.tail=FALSE) 
+      cat(' ==== Answer ====','\n')
+      cat('right-tail t test', '\n')
+      cat('P-value :', p)
+    }
+  }
+}  
+ind_t(0.98,0.95,0.026,0.025,77,161)
 ```
 
 > Output :
@@ -249,7 +290,7 @@ P-value : 1.60653
 
 Since P-value is higher than $\alpha=0.05$, we take the $H_0$, and conclude that the true difference in population mean bone mineral is equal to 0. 
 
-#### Q11. The table below compares the levels of carboxyhemoglobin for a group of non-smokers and a group of cigarette smokers. Sample means and standard deviations are shown. It is believed that the mean carboxyhemoglobin level of the smokers must be higher than mean level of the nonsmokers. There is no reason to assume that the underlying population variances are identical.
+#### Q11. The table below compares the levels of carboxyhemoglobin for a group of non-smokers and a group of cigarette smokers. Sample means and standard deviations are shown. <u>It is believed that the mean carboxyhemoglobin level of the smokers must be higher than mean level of the nonsmokers.</u> There is <u>no reason to assume that the underlying population variances are identical</u>.
 
 | Group       | n    | carboxyhemoglobin(%)     |
 | ----------- | ---- | ------------------------ |
@@ -258,12 +299,71 @@ Since P-value is higher than $\alpha=0.05$, we take the $H_0$, and conclude that
 
 **(a) What are the null and alternative hypotheses of the one-sided test?**
 
+$H_0:\mu_2\le\mu_1 => \mu_{1}-\mu_{2}\ge0$
+
+$H_a:\mu_2>\mu_1 => \mu_{1}-\mu_{2}<0\:(left(lower)\:tail)$ 
+
 **(b) Conduct the test at the $0.05$ level of significance. What do you conclude?**
+$$
+t_{0}=\frac{(\overline{x_1}-\overline{x_2})-(\mu_1-\mu_2)}{\sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}}}\\
+df=\frac{(\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2})^2}{(\frac{(\frac{S_1^2}{n_1})^2}{n_1-1}+\frac{(\frac{S_2^2}{n_2})^2}{n_2-1})}
+$$
+
 
 > R-code :
 
 ```R
-
+# Q8.c Q11.b
+# independent t test
+ind_t <- function(x1, x2, s1, s2, n1, n2){
+  question <- as.character(readline(prompt="Are population variances assume to be equal (y/n) ? : "))
+  tail <- as.character(readline(prompt='What testing tail is gonna to perform (left/right/two-tails)? :'))
+  if (question == 'y') {
+    sp_square <- (((n1-1)*s1*s1)+((n2-1)*s2*s2))/(n1+n2-2)
+    t0 <- (x1-x2)/sqrt(sp_square*((1/n1)+(1/n2)))
+    df=(n1+n2-2)
+    cat('T :', t0, '\n')
+    cat('df :', df, '\n')
+    if (tail == 'left') {
+      p = 2*pt(t0, df=df, lower.tail = TRUE)
+      cat(' ==== Answer ====','\n')
+      cat('left-tail t test', '\n')
+      cat('P-value :', p)
+    }else if(tail == 'two-sided'){
+      p = 2*pt(t0, df=df, lower.tail = TRUE)
+      cat(' ==== Answer ====','\n')
+      cat('two-tails t test', '\n')
+      cat('P-value :', p)
+    }else{
+      p = 2*pt(t0, df=df, lower.tail = FALSE)
+      cat(' ==== Answer ====','\n')
+      cat('right-tail t test', '\n')
+      cat('P-value :', p)
+    }
+  }
+  else{
+    t0 <- ((x1-x2)-0)/sqrt((s1*s1/n1)+(s2*s2/n2))
+    df <- ((s1*s1/n1)+(s2*s2/n2))^2/(((s1*s1/n1)^2/(n1-1))+((s2*s2/n2)^2/(n2-1)))
+    cat('T :', t0, '\n')
+    cat('df :', df, '\n')
+    if (tail == 'left') {
+      p = pt(t0, df=df, lower.tail=TRUE) 
+      cat(' ==== Answer ====','\n')
+      cat('left-tail t test', '\n')
+      cat('P-value :', p)
+    }else if(tail == 'two-sided'){
+      p = pt(t0, df=df, lower.tail=TRUE) 
+      cat(' ==== Answer ====','\n')
+      cat('two-tails t test', '\n')
+      cat('P-value :', p)
+    }else{
+      p = pt(t0, df=df, lower.tail=FALSE) 
+      cat(' ==== Answer ====','\n')
+      cat('right-tail t test', '\n')
+      cat('P-value :', p)
+    }
+  }
+}  
 ```
 
 > Output :
