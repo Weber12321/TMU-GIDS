@@ -6,7 +6,7 @@ ___
 
 ###### Q2. What is the idea behind the one-way analysis of variance? What two measures of variation are being compared?
 
-It is aimed to compare *k* groups' difference of *means*.
+It is aimed to compare *k* groups' difference of *means*. It is a test of ratio of **within-group variance** and **between-group variance.**
 
 
 
@@ -217,7 +217,6 @@ group_var <- function(k, afa){
   
   
   for(col in C){
-    # cat(col[1], '*',col[2],'\n')
     X <- c(M[col[1]],M[col[2]])
     Num <- c(N[col[1]],N[col[2]])
     afa_new <- afa/com_n
@@ -329,7 +328,7 @@ new alpha : 0.008333333
 Do not reject H0 in the condition of 3 & 4 
 ```
 
-Answer : ???
+Answer : Since all comparison is do not reject the $H_0$, there is no difference among the mean systolic blood pressures of the four groups.
 
 ###### Q8. One of the goals of the Edinburgh Artery Study was to investigate the risk factors for peripheral arterial disease among persons 55 to 74 years of age. You wish to compare mean LDL cholesterol levels, measured in $mmol/liter$, among four different populations of subjects : patients with intermittent claudication or interruptions in movements, those with major asymptomatic disease, those with minor asymptomatic disease, and those with no evidence of disease at all. Samples are selected from each population；summary statistics are shown below.  
 
@@ -342,66 +341,191 @@ Answer : ???
 
 ###### (a) Test the null hypothesis that the mean LDL cholesterol levels are the same for each of the four populations. What are the degrees of freedom associated with this test? 
 
-> R-code :
-
-```R
-
-```
-
-> Output :
-
-```R
-
-```
-
 Answer : 
+
+$df_n = sum(n)-k=73+105+240+1080-4=1494\\df_k = k-1 = 4$
 
 ###### (b) What do you conclude?
 
 > R-code :
 
 ```R
-
+group_var <- function(k, afa){
+  
+  cat('==== fill in the sums of the obs ====', '\n')
+  
+  N <- c()
+  for (i in c(1:k)) {
+    n <- as.numeric(readline(prompt="Enter n: "))
+    N <- append(N, n)
+  }
+  cat('Sums of the obs are : ', N ,'\n')
+  
+  cat('\n', '==== fill in the means of the obs ====', '\n')
+  M <- c()
+  for (j in c(1:k)) {
+    m <- as.numeric(readline(prompt="Enter means: "))
+    M <- append(M, m)
+  }
+  cat('Means of the obs are : ', M ,'\n')
+  
+  cat('\n', '==== fill in the sds of the obs ====', '\n')
+  S <- c()
+  for (l in c(1:k)) {
+    s <- as.numeric(readline(prompt="Enter sds: "))
+    S <- append(S, s)
+  }
+  cat('Sds of the obs are : ', S ,'\n')
+  
+  in_group_var <- sum(((N-1)*(S^2)))/(sum(N)-k)
+  
+  cat('\n', '==== within group var ====', '\n', in_group_var, '\n')
+  
+  xbar <- sum(N*M)/sum(N)
+  
+  be_group_var <- sum(N*((M-xbar)^2))/(k-1)
+  
+  cat('\n', '==== between group var ====', '\n', be_group_var, '\n', '\n')
+  
+  f = be_group_var/in_group_var
+  
+  p <- pf(f, sum(N)-k, k-1, lower.tail = FALSE)
+  
+  cat('\n', '==== p-value for f-distribution ====', '\n', p, '\n', '\n')
+  
+  
+  # multi comparison
+  com_n <- dim(combn(k, 2))[2]
+  C <- as.data.frame(combn(k, 2))
+  
+  
+  for(col in C){
+    X <- c(M[col[1]],M[col[2]])
+    Num <- c(N[col[1]],N[col[2]])
+    afa_new <- afa/com_n
+    cat('new alpha :', afa_new, '\n','\n')
+    t <- (X[1]-X[2])/sqrt(in_group_var*((1/Num[1])+(1/Num[2])))
+    df <- sum(N)-k
+    cat('==== T value of condition ====', '\n', col[1], '&', col[2], ':', t, '\n')
+    pval <- 2*pt(-abs(t), df=df)
+    cat('==== P value of condition ====', '\n', col[1], '&', col[2], ':', pval, '\n','\n')
+    
+    if (pval < afa_new) {
+      cat('Reject H0 in the condition of', col[1], '&', col[2], '\n')
+    }else{
+      cat('Do not reject H0 in the condition of', col[1], '&', col[2], '\n')
+    }
+    cat('\n', '\n')
+  }
+}
+group_var(4, 0.05) # Run code ...
 ```
 
 > Output :
 
 ```R
+==== fill in the sums of the obs ==== 
+Enter n: 73
+Enter n: 105
+Enter n: 240
+Enter n: 1080
+Sums of the obs are :  73 105 240 1080 
 
+ ==== fill in the means of the obs ==== 
+Enter means: 6.22
+Enter means: 5.81
+Enter means: 5.77
+Enter means: 5.47
+Means of the obs are :  6.22 5.81 5.77 5.47 
+
+ ==== fill in the sds of the obs ==== 
+Enter sds: 1.62
+Enter sds: 1.43
+Enter sds: 1.24
+Enter sds: 1.31
+Sds of the obs are :  1.62 1.43 1.24 1.31 
+
+ ==== within group var ==== 
+ 1.754207 
+
+ ==== between group var ==== 
+ 19.06123 
+
+ ==== p-value for f-distribution ==== 
+ 0.03555153 
+ 
+new alpha : 0.008333333 
+ 
+==== T value of condition ==== 
+ 1 & 2 : 2.031372 
+==== P value of condition ==== 
+ 1 & 2 : 0.04239393 
+ 
+Do not reject H0 in the condition of 1 & 2 
+
+ 
+new alpha : 0.008333333 
+ 
+==== T value of condition ==== 
+ 1 & 3 : 2.54195 
+==== P value of condition ==== 
+ 1 & 3 : 0.01112387 
+ 
+Do not reject H0 in the condition of 1 & 3 
+
+ 
+new alpha : 0.008333333 
+ 
+==== T value of condition ==== 
+ 1 & 4 : 4.682519 
+==== P value of condition ==== 
+ 1 & 4 : 3.090762e-06 
+ 
+Reject H0 in the condition of 1 & 4 
+
+ 
+new alpha : 0.008333333 
+ 
+==== T value of condition ==== 
+ 2 & 3 : 0.2581133 
+==== P value of condition ==== 
+ 2 & 3 : 0.796355 
+ 
+Do not reject H0 in the condition of 2 & 3 
+
+ 
+new alpha : 0.008333333 
+ 
+==== T value of condition ==== 
+ 2 & 4 : 2.511227 
+==== P value of condition ==== 
+ 2 & 4 : 0.01213607 
+ 
+Do not reject H0 in the condition of 2 & 4 
+
+ 
+new alpha : 0.008333333 
+ 
+==== T value of condition ==== 
+ 3 & 4 : 3.174033 
+==== P value of condition ==== 
+ 3 & 4 : 0.00153401 
+ 
+Reject H0 in the condition of 3 & 4 
 ```
 
 Answer : 
+
+The p-value of mean LDL cholesterol levels is less than $\alpha =0.05$, so we reject the $H_0$ that the mean LDL cholesterol levels are the same for each of the four populations.  And according to the multi comparison, the mean of Intermittent Claudication and the mean of Minor Asymptomatic Disease are less than the mean of no disease.
 
 ###### (c) What assumptions about the data must be true for you to use one-way analysis of variance technique?
 
-> R-code :
-
-```R
-
-```
-
-> Output :
-
-```R
-
-```
-
 Answer : 
+
++ Response variable residuals are normally distributed (or approximately normally distributed).
++ Variances of populations are equal.
++ Responses for a given group are independent and identically distributed normal random variables (not a simple random sample (SRS))
 
 ###### (d) Is it necessary to take an additional step in this analysis? If so, what is it? Explain.
 
-
-
-> R-code :
-
-```R
-
-```
-
-> Output :
-
-```R
-
-```
-
-Answer : 
+Answer : Since the outcome of the anova is to reject the $H_0$, so we have to perform multiple comparison to further test the difference among all set. 
