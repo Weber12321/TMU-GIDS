@@ -53,13 +53,18 @@ co(df$rank91, df$rank95)
 
 
 
+df <- read.csv('CVD_ALL.csv', row.names=NULL, header=T)
 
+df_1 = df %>% select(Waist, SBP)
 
+cat(' === Pearson === ', '\n')
+# Pearson's correlation coefficient
+co2(df_1$Waist, df_1$SBP)
 
-
-
-
-
+cat(' === linear model === ', '\n')
+# Simple linear regression
+linearMod <- lm(SBP ~ Waist, data=df_1)
+summary(linearMod)
 
 
 
