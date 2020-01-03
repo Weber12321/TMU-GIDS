@@ -18,7 +18,7 @@ ggplot(df, aes(x=duration, y=time)) + geom_point() + ggtitle('ScatterPlot of tim
 
 > Run code ...
 
-![](C:\Users\doudi\Downloads\Rplot01.png)
+![](C:\Users\Weber\Documents\GitHub\TMU-GIDS\大數據統計與預測\第十七章作業 (Correlation)\Rplot01.png)
 
 **(b) In the population of patients with ischemic heart disease, does there appear to be any evidence of a linear relationship between time to angina and duration of the attack ?**
 
@@ -211,7 +211,7 @@ ggplot(df, aes(x=rank91, y=rank92)) + geom_point() + ggtitle('Ranks of disciplin
 
 > Run code ...
 
-<img src="C:\Users\doudi\Downloads\Rplot02.png" style="zoom:67%;" />
+![](C:\Users\Weber\Documents\GitHub\TMU-GIDS\大數據統計與預測\第十七章作業 (Correlation)\Rplot02.png)
 
 **(c) Does there appear to be a relationship between these two quantities?**
 
@@ -422,4 +422,10 @@ F-statistic: 1.384e+04 on 1 and 62381 DF,  p-value: < 2.2e-16
 
 **Extra2. propose your opinions about the similarities and differences between the models of the Pearson correlation coefficient and the simple linear regression model.** 
 
-From the models we may see that both two p-value are in the same 
+From the models we may see that both two p-value are in the same. Theoretically, 
+
+| **similarities**                                             | **differences**                                              |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| the standardized regression coefficient is the same as Pearson's correlation coefficient. | The regression equation (i.e., a+bXa+bX) can be used to make predictions on YY based on values of XX |
+| The square of Pearson's correlation coefficient is the same as the R2R2 in simple linear regression. | While correlation typically refers to the linear relationship, it can refer to other forms of dependence, such as polynomial or truly nonlinear relationships |
+| Neither simple linear regression nor correlation answer questions of causality directly. This point is important, because I've met people that think that simple regression can magically allow an inference that XX causes YY. | While correlation typically refers to Pearson's correlation coefficient, there are other types of correlation, such as Spearman's. |
